@@ -1,4 +1,4 @@
-# Two-Layer Encrypted Contact Log (Concept) TECL (pronounced tackle)
+# Two-Layer Encrypted Contact Log (TECL)
 
 **Disclaimer: This project is a proof of concept. The code, as well as the concept, are not suited for production use.**
 **The protocol and reference implementation require further inspection!**
