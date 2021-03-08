@@ -49,55 +49,55 @@ The protocol uses all three kinds of boxes. We will now explore the different de
 
 ### Protocol Design
 
-Let $A$, $B$, and $H$ be the public keys of Alice, Bob, and the Health Authority with respective private keys $a$, $b$, and $h$.
-(Actually $A$ and $B$ should use fresh keys for each new encounter)
-Moreover, let $contact_A$ and $contact_B$ be the contact information of A and B and let $additionalData_A$, $additionalData_B$ be additional data that should be available for the other parties (thus not targeting the health authority).
-Let $encounterData$ be the encounter-specific data such as start- and end-time.
+Let <img src="https://render.githubusercontent.com/render/math?math=A">, <img src="https://render.githubusercontent.com/render/math?math=B">, and <img src="https://render.githubusercontent.com/render/math?math=H"> be the public keys of Alice, Bob, and the Health Authority with respective private keys <img src="https://render.githubusercontent.com/render/math?math=a">, <img src="https://render.githubusercontent.com/render/math?math=b">, and <img src="https://render.githubusercontent.com/render/math?math=h">.
+(Actually <img src="https://render.githubusercontent.com/render/math?math=A"> and <img src="https://render.githubusercontent.com/render/math?math=B"> should use fresh keys for each new encounter)
+Moreover, let <img src="https://render.githubusercontent.com/render/math?math=contact_A"> and <img src="https://render.githubusercontent.com/render/math?math=contact_B"> be the contact information of A and B and let <img src="https://render.githubusercontent.com/render/math?math=additionalData_A">, <img src="https://render.githubusercontent.com/render/math?math=additionalData_B"> be additional data that should be available for the other parties (thus not targeting the health authority).
+Let <img src="https://render.githubusercontent.com/render/math?math=encounterData"> be the encounter-specific data such as start- and end-time.
 
-Assume that party $A$ scans the code of $B$.
+Assume that party <img src="https://render.githubusercontent.com/render/math?math=A"> scans the code of <img src="https://render.githubusercontent.com/render/math?math=B">.
 
 #### Hiding Contact Information From the Involved Parties
 While it might be okay to share your name with the other parties, there is less need to also disclose, e.g. your address.
-We thus encrypt all personal contact information, so that only the health authority is able to decrypt it (using $H$).
+We thus encrypt all personal contact information, so that only the health authority is able to decrypt it (using <img src="https://render.githubusercontent.com/render/math?math=H">).
 As we want the health authority to confirm the source of contact information, we use the CryptoBox and add the sender identity.
-If, for example, $B$ shares information with $A$, $B$ would transfer: $(B, CryptoBox(contact_B), $additionalData_B$)$.
-To create the CryptoBox, $B$ needs access to his private Key $b$ as well as the public key $H$ of the health authority.
-$B$ can share this information with $A$ using e.g. a simple QR code.
-The additional Data could contain e.g. the name of the venue which $A$ could display to the user.
+If, for example, <img src="https://render.githubusercontent.com/render/math?math=B"> shares information with <img src="https://render.githubusercontent.com/render/math?math=A">, <img src="https://render.githubusercontent.com/render/math?math=B"> would transfer: <img src="https://render.githubusercontent.com/render/math?math=(B, CryptoBox(contact_B), additionalData_B)">.
+To create the CryptoBox, <img src="https://render.githubusercontent.com/render/math?math=B"> needs access to his private Key <img src="https://render.githubusercontent.com/render/math?math=b"> as well as the public key <img src="https://render.githubusercontent.com/render/math?math=H"> of the health authority.
+<img src="https://render.githubusercontent.com/render/math?math=B"> can share this information with <img src="https://render.githubusercontent.com/render/math?math=A"> using e.g. a simple QR code.
+The additional Data could contain e.g. the name of the venue which <img src="https://render.githubusercontent.com/render/math?math=A"> could display to the user.
 
 #### Secure Upload
-$B$ could share information with $A$ using a QR-code that might also be generated in advance.
-Therefore, $B$ could not be able to receive or store the contact information of $A$.
-This is solved by $A$ uploading the relevant contact data to a storage server.
+<img src="https://render.githubusercontent.com/render/math?math=B"> could share information with <img src="https://render.githubusercontent.com/render/math?math=A"> using a QR-code that might also be generated in advance.
+Therefore, <img src="https://render.githubusercontent.com/render/math?math=B"> could not be able to receive or store the contact information of <img src="https://render.githubusercontent.com/render/math?math=A">.
+This is solved by <img src="https://render.githubusercontent.com/render/math?math=A"> uploading the relevant contact data to a storage server.
 
-To secure the upload, $A$ randomly generates a fresh symmetric key $sk$ and encrypts the information of both $A$ and $B$ including $encounterData$ with it: $SecretBox([(A, CryptoBox(contact_A)), (B, CryptoBox(contact_B))], encounterData)$.
-This way, the data is only readable with access to $sk$. To allow contact tracing, all parties need to be able to reveal the (encrypted) contact information which corresponds to revealing $sk$ to the server (which would be at best but not necessarily operated by the health authorities as well).
-Because $A$ has no way to send $sk$ to $B$ right now, it asymmetrically encrypts the encounter key $sk$ for $B$ and uploads it as well: $(B, SealedBox(sk))$
-This time in a SealedBox to hide the sender information (in this case $A$).
-$A$ would also do the same thing for itself (and effectively all other parties) encrypting and uploading $sk$. This way, each party of the encounter can reveal their shared key $sk$ with their private keys.
-The $encounterData$ would be set by $A$ and could contain the start time and duration.
+To secure the upload, <img src="https://render.githubusercontent.com/render/math?math=A"> randomly generates a fresh symmetric key <img src="https://render.githubusercontent.com/render/math?math=sk"> and encrypts the information of both <img src="https://render.githubusercontent.com/render/math?math=A"> and <img src="https://render.githubusercontent.com/render/math?math=B"> including <img src="https://render.githubusercontent.com/render/math?math=encounterData"> with it: <img src="https://render.githubusercontent.com/render/math?math=SecretBox([(A, CryptoBox(contact_A)), (B, CryptoBox(contact_B))], encounterData)">.
+This way, the data is only readable with access to <img src="https://render.githubusercontent.com/render/math?math=sk">. To allow contact tracing, all parties need to be able to reveal the (encrypted) contact information which corresponds to revealing <img src="https://render.githubusercontent.com/render/math?math=sk"> to the server (which would be at best but not necessarily operated by the health authorities as well).
+Because <img src="https://render.githubusercontent.com/render/math?math=A"> has no way to send <img src="https://render.githubusercontent.com/render/math?math=sk"> to <img src="https://render.githubusercontent.com/render/math?math=B"> right now, it asymmetrically encrypts the encounter key <img src="https://render.githubusercontent.com/render/math?math=sk"> for <img src="https://render.githubusercontent.com/render/math?math=B"> and uploads it as well: <img src="https://render.githubusercontent.com/render/math?math=(B, SealedBox(sk))">
+This time in a SealedBox to hide the sender information (in this case <img src="https://render.githubusercontent.com/render/math?math=A">).
+<img src="https://render.githubusercontent.com/render/math?math=A"> would also do the same thing for itself (and effectively all other parties) encrypting and uploading <img src="https://render.githubusercontent.com/render/math?math=sk">. This way, each party of the encounter can reveal their shared key <img src="https://render.githubusercontent.com/render/math?math=sk"> with their private keys.
+The <img src="https://render.githubusercontent.com/render/math?math=encounterData"> would be set by <img src="https://render.githubusercontent.com/render/math?math=A"> and could contain the start time and duration.
 
 #### Hiding Upload patterns
-As there is exactly one $SealedBox$ upload for every party and one symmetrically encrypted party entry, $A$ thus combines each of them to one upload "pair". $A$ can further delay the upload of pairs thus mixing upload pairs of different encounters to hide specific encounters.
-In addition, the uploader $A$ could generate and upload fake data (please also see "Efficient Search in the Data").
+As there is exactly one <img src="https://render.githubusercontent.com/render/math?math=SealedBox"> upload for every party and one symmetrically encrypted party entry, <img src="https://render.githubusercontent.com/render/math?math=A"> thus combines each of them to one upload "pair". <img src="https://render.githubusercontent.com/render/math?math=A"> can further delay the upload of pairs thus mixing upload pairs of different encounters to hide specific encounters.
+In addition, the uploader <img src="https://render.githubusercontent.com/render/math?math=A"> could generate and upload fake data (please also see "Efficient Search in the Data").
 Ultimately another proxy server could collect and mix data to prevent user identification based on e.g. their IP or fingerprinting.
-We require that at least on $SecretBox$ entry also contains $encounterData$.
+We require that at least on <img src="https://render.githubusercontent.com/render/math?math=SecretBox"> entry also contains <img src="https://render.githubusercontent.com/render/math?math=encounterData">.
 
 #### Tracing
 
-Assume that party $B$ got infected and shall now reveal contact details to the health authorities.
-$B$ would then reveal the relevant private keys that correspond to the used public keys, e.g. $B$ during the relevant times.
+Assume that party <img src="https://render.githubusercontent.com/render/math?math=B"> got infected and shall now reveal contact details to the health authorities.
+<img src="https://render.githubusercontent.com/render/math?math=B"> would then reveal the relevant private keys that correspond to the used public keys, e.g. <img src="https://render.githubusercontent.com/render/math?math=B"> during the relevant times.
 
 In the simplest case, the upload server is operated by the health authorities themselves which hides e.g. access patterns.
-With the private key $b$, the health authority could reveal the shared key $sk$ and with it, the information $([(A, CryptoBox(contact_A)), (B, CryptoBox(contact_B))], encounterData)$.
-The health authority would then be able to read of course the $encounterData$ but it could also verify and decrypt the crypto boxes which had previously been asymmetrically encrypted using $H$; the health authority thus has access to the contact information.
+With the private key <img src="https://render.githubusercontent.com/render/math?math=b">, the health authority could reveal the shared key <img src="https://render.githubusercontent.com/render/math?math=sk"> and with it, the information <img src="https://render.githubusercontent.com/render/math?math=([(A, CryptoBox(contact_A)), (B, CryptoBox(contact_B))], encounterData)">.
+The health authority would then be able to read of course the <img src="https://render.githubusercontent.com/render/math?math=encounterData"> but it could also verify and decrypt the crypto boxes which had previously been asymmetrically encrypted using <img src="https://render.githubusercontent.com/render/math?math=H">; the health authority thus has access to the contact information.
 
 
 #### Efficient Search in the Data
 In the case of the reception of private keys, the health authorities deal with probably an enormous database with possibly billions of entries. It will therefore be infeasible to linearly search through the entries trying to decrypt them individually.
 Using the public key, a lookup of the corresponding SealedBox entry is possible.
-Because the protocol uploads pairs $((B, SealedBox(sk)),SecretBox(((A, CryptoBox(contact_A)), encounterData)))$, the first SecretBox entry is luckily known and as such, the public key $A$ could be revealed.
-If $A$ now orders the parties into a ring (e.g. B->A->B) such that each decryption reveals the next possible entry, the decryption process efficiency is increased.
+Because the protocol uploads pairs <img src="https://render.githubusercontent.com/render/math?math=((B, SealedBox(sk)),SecretBox(((A, CryptoBox(contact_A)), encounterData)))">, the first SecretBox entry is luckily known and as such, the public key <img src="https://render.githubusercontent.com/render/math?math=A"> could be revealed.
+If <img src="https://render.githubusercontent.com/render/math?math=A"> now orders the parties into a ring (e.g. B->A->B) such that each decryption reveals the next possible entry, the decryption process efficiency is increased.
 Lookup based on the public key is a simple
 
 ## Reference Implementation
@@ -127,7 +127,7 @@ As the other parties are not able to decrypt the content, a malicious party coul
 Only the health authority would be able to verify the origins. TODO: Is this true?
 
 #### Could the user also log-out from venues?
-Checking out from a location could be supported using additional data in either $encounterData$ or the contact data e.g. $contact_B$ (which could be a second QR code).
+Checking out from a location could be supported using additional data in either <img src="https://render.githubusercontent.com/render/math?math=encounterData"> or the contact data e.g. <img src="https://render.githubusercontent.com/render/math?math=contact_B"> (which could be a second QR code).
 
 
 #### Could users verify the public key while scanning?
