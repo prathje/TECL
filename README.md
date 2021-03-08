@@ -98,7 +98,6 @@ In the case of the reception of private keys, the health authorities deal with p
 Using the public key, a lookup of the corresponding SealedBox entry is possible.
 Because the protocol uploads pairs <img src="https://render.githubusercontent.com/render/math?math=((B, SealedBox(sk)),SecretBox(((A, CryptoBox(contact_A)), encounterData)))">, the first SecretBox entry is luckily known and as such, the public key <img src="https://render.githubusercontent.com/render/math?math=A"> could be revealed.
 If <img src="https://render.githubusercontent.com/render/math?math=A"> now orders the parties into a ring (e.g. B->A->B) such that each decryption reveals the next possible entry, the decryption process efficiency is increased.
-Lookup based on the public key is a simple
 
 ## Reference Implementation
 
